@@ -18,11 +18,17 @@ from django.contrib import admin
 from django.urls import path
 from validoraapp.views import *
 
+from django.http import HttpResponse
+
+def health_check(request):
+    return HttpResponse("OK")
+
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',ContactFormView.as_view(), name="home"),
+    path("healthz/", health_check),
 
 ] 
