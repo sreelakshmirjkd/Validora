@@ -588,27 +588,16 @@
             }
         }
     </style>
-    <!-- Brevo Conversations {literal} -->
-    <script>
-        (function(d, w, c) {
-            w.BrevoConversationsID = '62e458754dceeb20b11fe508';
-            w[c] = w[c] || function() {
-                (w[c].q = w[c].q || []).push(arguments);
-            };
-            var s = d.createElement('script');
-            s.async = true;
-            s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
-            if (d.head) d.head.appendChild(s);
-        })(document, window, 'BrevoConversations');
-    </script>
-    <!-- /Brevo Conversations {/literal} -->
+
+
+
 </head>
 
 <body>
     <!-- Header -->
     <header class="header">
         <div class="nav-container">
-            <div class="logo"><img src="{% static 'images/validora.png' %}" width="150" alt="Logo"></div>
+            <div><img src="{% static 'images/validora.png' %}" width="150"></div>
             <nav class="nav-menu">
                 <a href="#home">Home</a>
                 <a href="#services">Services</a>
