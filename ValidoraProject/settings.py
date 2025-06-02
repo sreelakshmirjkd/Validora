@@ -14,11 +14,6 @@ from pathlib import Path
 
 from decouple import config, Csv
 
-import os
-
-
-
-
 
 
 
@@ -36,6 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -97,6 +93,7 @@ WSGI_APPLICATION = 'ValidoraProject.wsgi.application'
 
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -150,7 +147,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 
 
