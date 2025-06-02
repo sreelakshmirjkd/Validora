@@ -582,7 +582,7 @@
             cursor: pointer;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 500px) {
             .mobile-menu-toggle {
                 display: block;
             }
@@ -599,7 +599,7 @@
         <div class="nav-container">
             <div>
                 <a class="logo" href="#home">
-                    <img src="{% static 'images/validora.webp' %}" alt="Logo" width="150">
+                    <img src="{% static 'images/validora.webp' %}" width="150">
                 </a>
             </div>
             <nav class="nav-menu">
@@ -620,6 +620,7 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero"> 
+        <img src="{% static 'images/validora.webp' %}" width="150">
         <div class="hero-content">
             <h1>VALIDORA</h1>
             <p class="tagline">The First Line of Defense Against Visa Scams</p>
