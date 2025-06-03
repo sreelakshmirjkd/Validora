@@ -28,7 +28,7 @@ def health_check(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',ContactFormView.as_view(), name="home"),
+    path('contact/',ContactFormView.as_view(), name="contact"),
     path("healthz/", health_check),
 
 ] 

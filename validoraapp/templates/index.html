@@ -977,7 +977,7 @@
                         <span>Monday-Friday</span>
                     </div>
                 </div>
-                <form method="post" class="contact-form">
+                <form method="post" class="contact-form" action="{% url 'contact' %}">
                     {% csrf_token %}
                     <div class="form-group">
                         {{ form.name }}
