@@ -1,0 +1,94 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALIDORA - The First Line of Defense Against Visa Scams</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+        
+
+
+
+
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div>
+                <a href="{% url 'home' %}">
+                    <img class="logo" src="{% static 'images/validora.png' %}" alt="Logo">
+                </a>
+            </div>
+
+
+
+            <nav class="nav-menu">
+
+                {% block menu_items %}
+
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#process">Process</a>
+                <a href="#about">About</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Contact</a>
+
+                {% endblock %}
+
+            </nav>
+
+            {% block nav_button %}
+
+            <a href="{% url 'appointment' %}" class="cta-button">Book Expert Consultation</a>
+
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            {% endblock %}
+            
+        </div>
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p><strong>VALIDORA</strong> - The First Line of Defense Against Visa Scams</p>
+            <a href="{% url 'privacy'%}">Privacy Policy</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span><a href="{% url 'terms' %}">Terms and Conditions</a></span>
+            <br><br>
+            <p>&copy; 2025 FDS COOP LLP. All rights reserved. | Serving anyone worldwide who suspects visa agency fraud.<br>
+                Disclaimer: I do not process visas or represent any immigration body. I help individuals understand the immigration process 
+                and recognize fraudulent practices based on publicly available information.
+            </p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</body>
+
+</html>

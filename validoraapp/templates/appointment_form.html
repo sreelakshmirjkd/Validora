@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block menu_items %}
+{% endblock %}
+
+{% block nav_button %}
+<a href="{% url 'home' %}" class="cta-button">Go Back</a>
+{% endblock %}
+
+{% block content %}
+<section class="appointment-section py-3">
+    <div class="container">
+        <h4 class="mb-4">Book an Expert Consultation</h4>
+        <form method="POST" enctype="multipart/form-data" class="row g-3" action="{% url 'appointment' %}">
+            {% csrf_token %}
+
+
+                <!-- Render name -->
+            <div class="col-md-4 mb-3 px-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label" style="font-weight:600;">
+                    {{ form.name.label }}:
+                </label>
+                {{ form.name }}
+                {% for error in form.name.errors %}
+                    <div class="text-danger small" style="font-weight:600;">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Render email -->
+            <div class="col-md-4 mb-3 px-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label" style="font-weight:600;">
+                    {{ form.email.label }}:
+                </label>
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <div class="text-danger small" style="font-weight:600;">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-4 mb-3 px-3">
+                <label for="{{ form.phone.id_for_label }}" class="form-label" style="font-weight:600;">{{ form.phone.label }}:</label>
+                <div class="input-group">
+                    <span class="input-group-text">+91</span>
+                        {{ form.phone }}
+                </div>
+                {% for error in form.phone.errors %}
+                    <div class="text-danger small" style="font-weight:600;">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+
+
+            
+            {% for field in form %}
+
+                    {% if field.name == 'confusions' %}
+                        <div class="col-12 mb-3 px-3">
+                            <label class="form-label d-block mb-2" style="font-weight:600;">{{ field.label }}:</label>
+                            <div class="row">
+                                {% for checkbox in field %}
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            {{ checkbox.tag }}
+                                            <label for="{{ checkbox.id_for_label }}" class="form-check-label">
+                                                {{ checkbox.choice_label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% for error in field.errors %}
+                                <div class="text-danger small" style="font-weight:600;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                    {% elif field.name == 'notes' %}
+                        <div class="col-12 mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label d-block" style="font-weight:600;">
+                                {{ field.label }}:
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="text-danger large" style="font-weight:600;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                    {% elif field.name != 'name' and field.name != 'email' and field.name != 'phone' %}
+
+
+                        <div class="col-md-4 mb-3 px-3">
+                            <label for="{{ field.id_for_label }}" class="form-label" style="font-weight:600;">
+                                {{ field.label }}:
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="text-danger small" style="font-weight:600;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                    {% elif field.name == 'preferred_time' %}
+
+                        <select name="preferred_time" id="preferred_time" class="form-control">
+                            {% for time_val, time_label in form.fields.preferred_time.choices %}
+                                <option value="{{ time_val }}"
+                                {% if time_val not in available_slots %}
+                                    disabled style="color: #ccc;"
+                                {% endif %}
+                                >
+                                {{ time_label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+
+                {% endif %}
+
+
+            {% endfor %}
+
+
+
+
+
+            {% if available_slots %}
+                <p style="color: rgb(3, 134, 3);">
+                </p>
+            {% else %}
+                <p style="color: rgb(187, 27, 27);">Sorry, no slots available today. Please choose another date.</p>
+            {% endif %}
+
+            <!-- This div will show Indian time equivalent -->
+            <div id="indian-time-message" style="margin-top:10px; font-weight: bold; color: green;"></div>
+
+
+            <div class="col-12 mb-3 px-3">
+                <label>
+                    <input type="checkbox" name="privacy_policy" required>
+                    I agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>
+                </label><br>
+
+                <label>
+                    <input type="checkbox" name="terms" required>
+                    I agree to the <a href="{% url 'terms' %}" target="_blank">Terms and Conditions</a>
+                </label><br>
+            </div>
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="cta-button px-5" style="margin-bottom: 20px;">Book Appointment</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#preferred_date", {
+      dateFormat: "d-m-Y",             // display as DD-MM-YYYY
+      minDate: new Date().fp_incr(3),  // minimum date 3 days from today
+      altInput: true,                  // nice user-friendly input display
+      altFormat: "d-m-Y",
+      disable: [
+        function(date) {
+          // Disable Saturday (6) and Sunday (0)
+          return (date.getDay() === 0 || date.getDay() === 6);
+        }
+      ]
+    });
+  });
+
+
+
+
+</script>
+
+<script>
+  // Parse JSON list of available slots from Django context
+  const availableSlots = JSON.parse('{{ available_slots_json|escapejs }}');
+  const twoPmStr = '{{ two_pm_str }}';  // "14:00:00"
+
+  // Check if 2 PM is NOT in available slots
+  if (!availableSlots.includes(twoPmStr)) {
+    alert("2 PM slot is not available. You can check another time slot on the same day or choose another day.");
+  }
+</script>
+
+
+
+
+<script>
+  // Map EU times (in 24hr format) to Indian time strings
+  const euToIndianTimeMap = {
+    '14:00:00': '5:30 PM IST',  // 14:00 Europe to 19:30 India (example)
+    '18:00:00': '9:30 PM IST',
+  };
+
+  const timeSelect = document.getElementById('preferred_time');
+  const messageDiv = document.getElementById('indian-time-message');
+
+  // Function to show Indian time message for a given time
+  function showIndianTime(timeValue) {
+    if(timeValue in euToIndianTimeMap) {
+      messageDiv.style.display = 'block';
+      messageDiv.textContent = `Equivalent Indian Time: ${euToIndianTimeMap[timeValue]}`;
+    } else {
+      messageDiv.style.display = 'none';
+      messageDiv.textContent = '';
+    }
+  }
+
+  // Show 2 PM equivalent on page load by default
+  document.addEventListener('DOMContentLoaded', function() {
+    // If the select has a selected value, show that; else show 2 PM by default
+    let selectedValue = timeSelect.value || '14:00:00';
+    timeSelect.value = selectedValue; // ensure 2 PM is selected by default if nothing is selected
+    showIndianTime(selectedValue);
+  });
+
+  // Update message when user changes selection
+  timeSelect.addEventListener('change', function() {
+    showIndianTime(this.value);
+  });
+</script>
+
+
+
+
+
+
+
+
+
+{% endblock %}
