@@ -1,6 +1,17 @@
 from django import forms
 from .models import Contact, Appointment, ConfusionType
 
+from datetime import date, timedelta, time
+from django import forms
+from .models import Appointment
+from datetime import time
+
+from django.forms import ModelMultipleChoiceField
+
+
+from datetime import datetime
+from django.core.exceptions import ValidationError
+
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
@@ -25,21 +36,7 @@ class ContactForm(forms.ModelForm):
         }
 
 
-from datetime import date, timedelta
-from django import forms
-from .models import Appointment
-from datetime import time
 
-from django.forms import ModelMultipleChoiceField
-from .models import ConfusionType  # Adjust import if needed
-
-
-from datetime import date, timedelta, time
-from django import forms
-from .models import Appointment, ConfusionType
-
-from datetime import datetime
-from django.core.exceptions import ValidationError
 
 
 class AppointmentForm(forms.ModelForm):
