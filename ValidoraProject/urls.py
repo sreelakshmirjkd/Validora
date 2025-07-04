@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("healthz/", health_check),
 
-    path('home/', ContactView.as_view(), name='home'),
+    path('', ContactView.as_view(), name='home'),
     path('form_submitted/', lambda request: render(request, 'form_submit.html'), name='form_submit'),
     path('appointment/', AppointmentView.as_view(), name='appointment'),
     path('appointment_scheduled/',AppointmentSubmitView.as_view(), name='appointment_submit'),
