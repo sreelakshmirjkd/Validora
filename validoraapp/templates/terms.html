@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block nav_button %}
-<a href="{% url 'appointment' %}" class="cta-button">Go Back</a>
+<a href="{% url 'home' %}" class="cta-button">Back to Home</a>
 {% endblock %}
 
 {% block content %}
 <section class="terms-section py-3">
+
+    <a href="{% url 'appointment' %}"><i class="fa-solid fa-arrow-left"></i></a>
     <div class="container" style="margin-top: 100px;">
         <h4 class="mb-4" style="text-align: center;">Terms and Conditions</h4>
 
@@ -56,7 +58,7 @@
         <p>We may update these Terms & Conditions anytime. <br>
         Continued use of the website implies acceptance of the updated terms.<br></p>
         <h6>6. Contact</h6>
-        <p>Email: syncfdsk2019@gmail.com, info@validora.eu<br>
+        <p>Email: syncfdsk2019@gmail.com<br>
         Last updated: 01 July 2025</p>
 
 
