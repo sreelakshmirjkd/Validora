@@ -23,6 +23,7 @@ env/
 media/
 uploads/
 staticfiles/
+appointmet_uploads/
 
 # API
 
