@@ -277,7 +277,8 @@ def append_appointment_to_google_sheet(appointment):
     headers = [
         'Name', 'Email', 'Phone', 'Address', 'City', 'State',
         'Visa Country', 'Agency Name', 'Preferred Date', 'Preferred Time',
-        'Confusions', 'Notes','consent_privacy_policy','consent_terms_conditions', 'Payment Status','file','reviewed','status','Submitted At'
+        'Confusions', 'Notes','consent_privacy_policy','consent_terms_conditions', 
+        'Payment Status','file','reviewed','status','Submitted At'
     ]
 
     # Check and add header if not present
