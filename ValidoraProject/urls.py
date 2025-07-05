@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('', ContactView.as_view(), name='home'),
     path('form_submitted/', lambda request: render(request, 'form_submit.html'), name='form_submit'),
-    path('', AppointmentView.as_view(), name='appointment'),
+    path('appointment/', AppointmentView.as_view(), name='appointment'),
     path('appointment_scheduled/',AppointmentSubmitView.as_view(), name='appointment_submit'),
     path('privacy_policy/',PrivacyView.as_view(), name='privacy'),
     path('terms/',TermsView.as_view(), name='terms'),
