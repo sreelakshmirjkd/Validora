@@ -56,7 +56,7 @@ GOOGLE_SERVICE_ACCOUNT_FILE = config('GOOGLE_SERVICE_ACCOUNT_FILE')
 
 SCOPES = config('SCOPES', '').split()
 
-V_EMAIL = config("V_EMAIL")
+
 
 
 
@@ -148,6 +148,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+V_EMAIL = config("V_EMAIL")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
