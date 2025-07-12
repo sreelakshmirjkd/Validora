@@ -24,6 +24,7 @@ media/
 uploads/
 staticfiles/
 appointment_uploads/
+static/
 
 # API
 
