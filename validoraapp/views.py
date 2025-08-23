@@ -57,43 +57,54 @@ class ContactView(View):
             subject = f"New message from {name}"
             full_message = f"From: {name} <{email}>\nPhone: {phone}\n\n{message}"
 
-
-            try:
-                append_to_google_sheet([name, email, phone, message])
-            except Exception as e:
-                # Log error or handle failure but don't crash
-                print(f"Failed to append to Google Sheet: {e}")
+            # --------------------------------------------------------------------
 
 
-            # to team
+            # try:
+            #     append_to_google_sheet([name, email, phone, message])
+            # except Exception as e:
+            #     # Log error or handle failure but don't crash
+            #     print(f"Failed to append to Google Sheet: {e}")
 
-            send_mail(
-                subject,
-                full_message,
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.V_EMAIL],
-                fail_silently=False,
-            )
 
-            confirmation_subject = "We received your message"
-            confirmation_message = (
-            f"Hi {name},\n\n"
-            "Thank you for contacting us. We’ve received your message and will respond shortly.\n\n"
-            "Best regards,\n"
-            "Team"
-            )
+            # # to team
+
+            # send_mail(
+            #     subject,
+            #     full_message,
+            #     settings.DEFAULT_FROM_EMAIL,
+            #     [settings.V_EMAIL],
+            #     fail_silently=False,
+            # )
+
+            # confirmation_subject = "We received your message"
+            # confirmation_message = (
+            # f"Hi {name},\n\n"
+            # "Thank you for contacting us. We’ve received your message and will respond shortly.\n\n"
+            # "Best regards,\n"
+            # "Team"
+            # )
+        # -----------------------additional to remove later---------------------------------------------
+
+            return render(request, self.template_name, {
+                'form': self.form_class(),
+                'message': "Form submissions are temporarily paused."
+            })
+        
+        # --------------------------------------------------------------------
+
 
             # to customer
 
-            send_mail(
-            confirmation_subject,
-            confirmation_message,
-            settings.DEFAULT_FROM_EMAIL,
-            [email],  
-            fail_silently=False,
-            )
+        #     send_mail(
+        #     confirmation_subject,
+        #     confirmation_message,
+        #     settings.DEFAULT_FROM_EMAIL,
+        #     [email],  
+        #     fail_silently=False,
+        #     )
 
-        return redirect('form_submit')  
+        # return redirect('form_submit')  
         
 
 
@@ -101,27 +112,28 @@ class ContactView(View):
 # contact_form
 
 
-def append_to_google_sheet(row):
-    # Path to your service account JSON file
-    SERVICE_ACCOUNT_FILE = settings.GOOGLE_SERVICE_ACCOUNT_FILE
+# def append_to_google_sheet(row):
+#     # Path to your service account JSON file
+#     SERVICE_ACCOUNT_FILE = settings.GOOGLE_SERVICE_ACCOUNT_FILE
 
-    # Define the scopes
-    SCOPES = settings.SCOPES
+#     # Define the scopes
+#     SCOPES = settings.SCOPES
 
-    creds = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
-        scopes=SCOPES
-    )
+#     creds = Credentials.from_service_account_file(
+#         SERVICE_ACCOUNT_FILE,
+#         scopes=SCOPES
+#     )
      
-    client = gspread.authorize(creds)
+#     client = gspread.authorize(creds)
 
-    # Open your spreadsheet by ID
-    SPREADSHEET_ID = settings.GOOGLE_SHEET_ID_CONTACT
-    sheet = client.open_by_key(SPREADSHEET_ID).sheet1  
+#     # Open your spreadsheet by ID
+#     SPREADSHEET_ID = settings.GOOGLE_SHEET_ID_CONTACT
+#     sheet = client.open_by_key(SPREADSHEET_ID).sheet1  
 
-    # Append the row
-    sheet.append_row(row)
+#     # Append the row
+#     sheet.append_row(row)
 
+# --------------------------------------------------------------------
 
 
 
@@ -165,93 +177,96 @@ class AppointmentView(View):
         if form.is_valid():
             appointment = form.save()
 
-            # Append appointment data to Google Sheet
-            try:
-                append_appointment_to_google_sheet(appointment)
-            except Exception as e:
-                print(f"Failed to append to Google Sheet: {e}")
+    # --------------------------------------------------------------------
+    
 
-            subject = 'Appointment Confirmed'
-            from_email = settings.DEFAULT_FROM_EMAIL
-            to_email = [appointment.email]
+    #         # Append appointment data to Google Sheet
+    #         try:
+    #             append_appointment_to_google_sheet(appointment)
+    #         except Exception as e:
+    #             print(f"Failed to append to Google Sheet: {e}")
 
-            text_content = f"""Dear {appointment.name},
+    #         subject = 'Appointment Confirmed'
+    #         from_email = settings.DEFAULT_FROM_EMAIL
+    #         to_email = [appointment.email]
 
-    Thank you for scheduling an appointment with us. This email is to confirm your appointment as follows:
+    #         text_content = f"""Dear {appointment.name},
 
-    Date: {appointment.preferred_date}
-    Time: {appointment.preferred_time}
+    # Thank you for scheduling an appointment with us. This email is to confirm your appointment as follows:
 
-    If you have any questions or need to reschedule, please feel free to reply to this email.
+    # Date: {appointment.preferred_date}
+    # Time: {appointment.preferred_time}
 
-    We look forward to assisting you.
+    # If you have any questions or need to reschedule, please feel free to reply to this email.
 
-    Best regards,
-    Team
-    Validora
-    FDS COOP LLP
-    """
+    # We look forward to assisting you.
 
-            html_content = f"""
-            <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <p>Dear {appointment.name},</p>
+    # Best regards,
+    # Team
+    # Validora
+    # FDS COOP LLP
+    # """
 
-                <p>Thank you for scheduling an appointment with us. This email is to confirm your appointment as follows:</p>
+    #         html_content = f"""
+    #         <html>
+    #         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    #             <p>Dear {appointment.name},</p>
 
-                <table style="border-collapse: collapse; margin: 20px 0;">
-                <tr>
-                    <td style="padding: 8px; font-weight: bold;">Date:</td>
-                    <td style="padding: 8px;">{appointment.preferred_date}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; font-weight: bold;">Time:</td>
-                    <td style="padding: 8px;">{appointment.preferred_time}</td>
-                </tr>
-                </table>
+    #             <p>Thank you for scheduling an appointment with us. This email is to confirm your appointment as follows:</p>
 
-                <p>If you have any questions or need to reschedule, please feel free to reply to this email.</p>
+    #             <table style="border-collapse: collapse; margin: 20px 0;">
+    #             <tr>
+    #                 <td style="padding: 8px; font-weight: bold;">Date:</td>
+    #                 <td style="padding: 8px;">{appointment.preferred_date}</td>
+    #             </tr>
+    #             <tr>
+    #                 <td style="padding: 8px; font-weight: bold;">Time:</td>
+    #                 <td style="padding: 8px;">{appointment.preferred_time}</td>
+    #             </tr>
+    #             </table>
 
-                <p>We look forward to assisting you.</p>
+    #             <p>If you have any questions or need to reschedule, please feel free to reply to this email.</p>
 
-                <br>
-                <p>Best regards,<br>
-                Team<br>
-                Validora<br>
-                FDS COOP LLP</p>
-            </body>
-            </html>
-            """
+    #             <p>We look forward to assisting you.</p>
 
-            msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
-            msg.attach_alternative(html_content, "text/html")
-            msg.send(fail_silently=False)
+    #             <br>
+    #             <p>Best regards,<br>
+    #             Team<br>
+    #             Validora<br>
+    #             FDS COOP LLP</p>
+    #         </body>
+    #         </html>
+    #         """
+
+    #         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+    #         msg.attach_alternative(html_content, "text/html")
+    #         msg.send(fail_silently=False)
 
 
-            # Team notification
+    #         # Team notification
 
-            send_mail(
-                'New Appointment Booked',
-                f'''
-                Name: {appointment.name}
-                Email: {appointment.email}
-                Phone: {appointment.phone}
-                Visa Country: {appointment.visa_country}
-                Agency Name: {appointment.agency_name}
-                Preferred Date: {appointment.preferred_date}
-                Preferred Time: {appointment.preferred_time}
-                Confusions: {", ".join([c.name for c in appointment.confusions.all()])}
-                Notes: {appointment.notes}
-                ''',
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.V_EMAIL],
-                fail_silently=False,
-            )
+    #         send_mail(
+    #             'New Appointment Booked',
+    #             f'''
+    #             Name: {appointment.name}
+    #             Email: {appointment.email}
+    #             Phone: {appointment.phone}
+    #             Visa Country: {appointment.visa_country}
+    #             Agency Name: {appointment.agency_name}
+    #             Preferred Date: {appointment.preferred_date}
+    #             Preferred Time: {appointment.preferred_time}
+    #             Confusions: {", ".join([c.name for c in appointment.confusions.all()])}
+    #             Notes: {appointment.notes}
+    #             ''',
+    #             settings.DEFAULT_FROM_EMAIL,
+    #             [settings.V_EMAIL],
+    #             fail_silently=False,
+    #         )
 
-            return redirect('appointment_submit')
+    #         return redirect('appointment_submit')
 
-        # If form invalid
-        return render(request, self.template_name, {'form': form})
+    #     # If form invalid
+    #     return render(request, self.template_name, {'form': form})
 
 
 
@@ -260,69 +275,69 @@ class AppointmentView(View):
 
 
 
-def append_appointment_to_google_sheet(appointment):
-    SERVICE_ACCOUNT_FILE = settings.GOOGLE_SERVICE_ACCOUNT_FILE
-    SCOPES = settings.SCOPES
+# def append_appointment_to_google_sheet(appointment):
+#     SERVICE_ACCOUNT_FILE = settings.GOOGLE_SERVICE_ACCOUNT_FILE
+#     SCOPES = settings.SCOPES
 
-    creds = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
-        scopes=SCOPES
-    )
+#     creds = Credentials.from_service_account_file(
+#         SERVICE_ACCOUNT_FILE,
+#         scopes=SCOPES
+#     )
 
-    client = gspread.authorize(creds)
-    SPREADSHEET_ID = settings.GOOGLE_SHEET_ID_APPOINTMENT
-    sheet = client.open_by_key(SPREADSHEET_ID).sheet1
+#     client = gspread.authorize(creds)
+#     SPREADSHEET_ID = settings.GOOGLE_SHEET_ID_APPOINTMENT
+#     sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
-    # Define headers (ensure this matches your appointment model exactly)
-    headers = [
-        'Name', 'Email', 'Phone', 'Address', 'City', 'State',
-        'Visa Country', 'Agency Name', 'Preferred Date', 'Preferred Time',
-        'Confusions', 'Notes','consent_privacy_policy','consent_terms_conditions', 
-        'Payment Status','file','reviewed','status','Submitted At'
-    ]
+#     # Define headers (ensure this matches your appointment model exactly)
+#     headers = [
+#         'Name', 'Email', 'Phone', 'Address', 'City', 'State',
+#         'Visa Country', 'Agency Name', 'Preferred Date', 'Preferred Time',
+#         'Confusions', 'Notes','consent_privacy_policy','consent_terms_conditions', 
+#         'Payment Status','file','reviewed','status','Submitted At'
+#     ]
 
-    # Check and add header if not present
-    existing_data = sheet.get_all_values()
-    if not existing_data or existing_data[0] != headers:
-        sheet.insert_row(headers, 1)
-        existing_data = sheet.get_all_values()  # Refresh after inserting header
+#     # Check and add header if not present
+#     existing_data = sheet.get_all_values()
+#     if not existing_data or existing_data[0] != headers:
+#         sheet.insert_row(headers, 1)
+#         existing_data = sheet.get_all_values()  # Refresh after inserting header
 
-    # Prepare new row
-    new_row = [
-        appointment.name,
-        appointment.email,
-        appointment.phone,
-        appointment.address,
-        appointment.city,
-        appointment.state,
-        appointment.visa_country,
-        appointment.agency_name,
-        str(appointment.preferred_date),
-        str(appointment.preferred_time),
-        ", ".join([c.name for c in appointment.confusions.all()]),
-        appointment.notes or '',
-        appointment.consent_privacy_policy,
-        appointment.consent_terms_conditions,
-        appointment.payment_status,
-        appointment.file,
-        appointment.reviewed,
-        appointment.status,
-        str(appointment.submitted_at),
+#     # Prepare new row
+#     new_row = [
+#         appointment.name,
+#         appointment.email,
+#         appointment.phone,
+#         appointment.address,
+#         appointment.city,
+#         appointment.state,
+#         appointment.visa_country,
+#         appointment.agency_name,
+#         str(appointment.preferred_date),
+#         str(appointment.preferred_time),
+#         ", ".join([c.name for c in appointment.confusions.all()]),
+#         appointment.notes or '',
+#         appointment.consent_privacy_policy,
+#         appointment.consent_terms_conditions,
+#         appointment.payment_status,
+#         appointment.file,
+#         appointment.reviewed,
+#         appointment.status,
+#         str(appointment.submitted_at),
         
         
 
-    ]
+#     ]
 
-    # duplication check (based on email + preferred_date)
-    for row in existing_data[1:]:  # Skip header
-        if len(row) >= 10 and row[1] == appointment.email and row[9] == str(appointment.preferred_date):
-            print("Duplicate entry found. Skipping append.")
-            return
+#     # duplication check (based on email + preferred_date)
+#     for row in existing_data[1:]:  # Skip header
+#         if len(row) >= 10 and row[1] == appointment.email and row[9] == str(appointment.preferred_date):
+#             print("Duplicate entry found. Skipping append.")
+#             return
 
-    # Append the row
-    sheet.append_row(new_row)
+#     # Append the row
+#     sheet.append_row(new_row)
 
-
+# --------------------------------------------------------------------
 
 
 
