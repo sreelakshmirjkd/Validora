@@ -394,7 +394,7 @@
     }
 
     .contact-content {
-        display: grid;
+        /* display: grid; */
         grid-template-columns: 1fr 1fr;
         gap: 4rem;
         align-items: center;
@@ -610,22 +610,7 @@
 
     /* contact section - temporary alignment */
 
-    
-    #contact .contact-content {
-        text-align: center; 
-    }
 
-  
-    #contact .contact-item {
-        display: flex;
-        flex-direction: column; 
-        align-items: center;    
-        margin-bottom: 15px;
-    }
-
-    #contact .contact-item i {
-        margin-bottom: 5px; 
-    }
 
 
     
